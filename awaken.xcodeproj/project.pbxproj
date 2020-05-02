@@ -18,7 +18,7 @@
 		DA6EF2EE245C9125002EBB83 /* DispatchWaiter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = DA6EF2E3245C9125002EBB83 /* DispatchWaiter.hpp */; };
 		DA6EF2EF245C9125002EBB83 /* ThreadWaiter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = DA6EF2E4245C9125002EBB83 /* ThreadWaiter.hpp */; };
 		DA6EF2F0245C9125002EBB83 /* Waiter.hpp in Headers */ = {isa = PBXBuildFile; fileRef = DA6EF2E6245C9125002EBB83 /* Waiter.hpp */; };
-		DA6EF2F1245C9125002EBB83 /* Awaken.hpp in Headers */ = {isa = PBXBuildFile; fileRef = DA6EF2E7245C9125002EBB83 /* Awaken.hpp */; };
+		DA6EF2F1245C9125002EBB83 /* Awaken.hpp in Headers */ = {isa = PBXBuildFile; fileRef = DA6EF2E7245C9125002EBB83 /* Awaken.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		DA6EF2F2245C9125002EBB83 /* Log.hpp in Headers */ = {isa = PBXBuildFile; fileRef = DA6EF2E8245C9125002EBB83 /* Log.hpp */; };
 		DAC0098F23B2228C009CC9B2 /* libAwaken.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC0098323B22284009CC9B2 /* libAwaken.a */; };
 /* End PBXBuildFile section */
@@ -206,11 +206,11 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA6EF2F1245C9125002EBB83 /* Awaken.hpp in Headers */,
 				DA6EF2F0245C9125002EBB83 /* Waiter.hpp in Headers */,
 				DA6EF2EE245C9125002EBB83 /* DispatchWaiter.hpp in Headers */,
 				DA6EF2EF245C9125002EBB83 /* ThreadWaiter.hpp in Headers */,
 				DA6EF2F2245C9125002EBB83 /* Log.hpp in Headers */,
-				DA6EF2F1245C9125002EBB83 /* Awaken.hpp in Headers */,
 				DA6EF2ED245C9125002EBB83 /* IOPowerAssertion.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
