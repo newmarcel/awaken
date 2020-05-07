@@ -9,10 +9,60 @@
 #ifndef IOPowerSource_hpp
 #define IOPowerSource_hpp
 
+#include <functional>
+
 namespace Awaken
 {
 
-
+/// Represents the device power source with a battery capacity
+/// if available.
+class IOPowerSource
+{
+public:
+    
+    /// A return value representing the unavailability
+    /// of a power source capacity.
+    constexpr static float CapacityUnavailable = -1.0;
+    
+#pragma mark - Life Cycle
+    
+    IOPowerSource() noexcept;
+    ~IOPowerSource() noexcept;
+    
+    IOPowerSource(const IOPowerSource&) = delete;
+    IOPowerSource& operator=(const IOPowerSource&) = delete;
+    
+    IOPowerSource(IOPowerSource&&) = default;
+    IOPowerSource& operator=(IOPowerSource&&) = default;
+    
+#pragma mark - Properties
+    
+    /// Returns true if the current device has a built-in battery.
+    bool isBatteryStatusAvailable() const noexcept;
+    
+    /// Returns the power source battery capacity or
+    /// `CapacityUnavailable` if no capacity is available.
+    float batteryCapacity() const noexcept;
+    
+#pragma mark - Capacity Changes
+    
+    /// An optional handler that will be called when the power source capacity
+    /// changes and `registerForCapacityChanges()` was called.
+    void setCapacityChangeHandler(std::function<void(float)>&&) noexcept;
+    
+    /// Registers the instance to receive power source capacity change
+    /// events using the handler set with `setCapacityChangeHandler()`.
+    /// @returns false if already registered for capacity changes
+    bool registerForCapacityChanges() noexcept;
+    
+    /// Unregisters the instance from receiving power source capacity
+    /// change events.
+    /// @returns false if not registered for capacity changes
+    bool unregisterFromCapacityChanges() noexcept;
+    
+private:
+    
+};
 
 }
 
