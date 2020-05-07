@@ -8,6 +8,7 @@
 
 #include "IOPowerSource/IOPowerSource.hpp"
 #include <CoreFoundation/CoreFoundation.h>
+#import <IOKit/ps/IOPSKeys.h>
 #import <IOKit/ps/IOPowerSources.h>
 #include "Log.hpp"
 
@@ -23,13 +24,93 @@ IOPowerSource::IOPowerSource() noexcept
 
 IOPowerSource::~IOPowerSource() noexcept
 {
+    //- (void)dealloc
+    //{
+    //    [self unregisterFromCapacityChanges];
+    //}
 }
 
+#pragma mark - Power Source Infos
+
+namespace Awaken
+{
+
+/// Returns a retained power source dictionary copy,
+/// call `CFRelease()` when done!
+static auto CopyPowerSourceDescription() -> optional<CFDictionaryRef>
+{
+    auto powerSources = IOPSCopyPowerSourcesInfo();
+    auto sourcesList = IOPSCopyPowerSourcesList(powerSources);
+    
+    if(CFArrayGetCount(sourcesList) == 0)
+    {
+        CFRelease(sourcesList);
+        CFRelease(powerSources);
+        os_log(DefaultLog, "No power sources found.");
+        return nullopt;
+    }
+    
+    auto powerSource = IOPSGetPowerSourceDescription(sourcesList, CFArrayGetValueAtIndex(sourcesList, 0));
+    CFRetain(powerSource);
+    
+    CFRelease(sourcesList);
+    CFRelease(powerSources);
+    
+    if(powerSource == NULL) { return nullopt; }
+    return powerSource;
+}
+
+}
+
+#pragma mark - Properties
+
+bool IOPowerSource::isBatteryStatusAvailable() const noexcept
+{
+    if(auto powerSourceDescription = CopyPowerSourceDescription())
+    {
+        const auto key = kIOPSTypeKey;
+        const auto internalBatteryTypeKey = kIOPSInternalBatteryType;
+        
+        auto batteryType = CFDictionaryGetValue(*powerSourceDescription, key);
+        
+        const auto isInternalBattery = CFEqual(batteryType, internalBatteryTypeKey);
+        CFRelease(*powerSourceDescription);
+        
+        return isInternalBattery;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+float IOPowerSource::batteryCapacity() const noexcept
+{
+    abort();
+    
+    //- (CGFloat)currentCapacity
+    //{
+    //    KYA_AUTO powerSourceInfos = [self powerSourceInfos];
+    //    if(powerSourceInfos == nil)
+    //    {
+    //        return KYABatteryStatusUnavailable;
+    //    }
+    //
+    //    KYA_AUTO key = [NSString stringWithUTF8String:kIOPSCurrentCapacityKey];
+    //    NSNumber *capacity = powerSourceInfos[key];
+    //    if(capacity == nil)
+    //    {
+    //        return KYABatteryStatusUnavailable;
+    //    }
+    //
+    //    return capacity.floatValue;
+    //}
+}
+
+#pragma mark - Capacity Changes
 
 // Reference Sources for KYABatteryStatus.m
 
-//const CGFloat KYABatteryStatusUnavailable = -1.0;
-//
 //static void KYABatteryStatusChangeHandler(void *context);
 //
 //@interface KYABatteryStatus ()
@@ -38,61 +119,12 @@ IOPowerSource::~IOPowerSource() noexcept
 //
 //@implementation KYABatteryStatus
 //
-//- (void)dealloc
-//{
-//    [self unregisterFromCapacityChanges];
-//}
+
 //
-//- (BOOL)isBatteryStatusAvailable
-//{
-//    KYA_AUTO powerSourceInfos = [self powerSourceInfos];
-//    if(powerSourceInfos == nil)
-//    {
-//        return NO;
-//    }
+
 //
-//    KYA_AUTO key = [NSString stringWithUTF8String:kIOPSTypeKey];
-//    KYA_AUTO internalBatteryTypeKey = [NSString stringWithUTF8String:kIOPSInternalBatteryType];
-//    NSString *batteryType = powerSourceInfos[key];
-//    return [batteryType isEqualToString:internalBatteryTypeKey];
-//}
+
 //
-//- (CGFloat)currentCapacity
-//{
-//    KYA_AUTO powerSourceInfos = [self powerSourceInfos];
-//    if(powerSourceInfos == nil)
-//    {
-//        return KYABatteryStatusUnavailable;
-//    }
-//
-//    KYA_AUTO key = [NSString stringWithUTF8String:kIOPSCurrentCapacityKey];
-//    NSNumber *capacity = powerSourceInfos[key];
-//    if(capacity == nil)
-//    {
-//        return KYABatteryStatusUnavailable;
-//    }
-//
-//    return capacity.floatValue;
-//}
-//
-//- (nullable NSDictionary *)powerSourceInfos
-//{
-//    KYA_AUTO blob = IOPSCopyPowerSourcesInfo();
-//    KYA_AUTO sourcesList = IOPSCopyPowerSourcesList(blob);
-//    CFRelease(blob);
-//
-//    if(CFArrayGetCount(sourcesList) == 0) {
-//        CFRelease(sourcesList);
-//        return nil;
-//    }
-//
-//    KYA_AUTO powerSource = IOPSGetPowerSourceDescription(blob, CFArrayGetValueAtIndex(sourcesList, 0));
-//    CFRetain(powerSource);
-//    CFRelease(sourcesList);
-//
-//    CFAutorelease(powerSource);
-//    return (__bridge NSDictionary *)powerSource;
-//}
 //
 //#pragma mark - Capacity Change Handler
 //
