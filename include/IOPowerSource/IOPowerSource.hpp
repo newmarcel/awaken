@@ -10,6 +10,7 @@
 #define IOPowerSource_hpp
 
 #include <functional>
+#include <optional>
 
 namespace Awaken
 {
@@ -61,7 +62,7 @@ public:
     bool unregisterFromCapacityChanges() noexcept;
     
 private:
-    
+    std::optional<std::function<void()>> _capacityChangeHandler;
 };
 
 }
