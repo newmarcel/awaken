@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DA0079DB24647A0600FD21FE /* IOPowerSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA0079D8246479FF00FD21FE /* IOPowerSource.cpp */; };
 		DA4706FF23B4E3B60092676D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DAC0097823B22238009CC9B2 /* main.cpp */; };
 		DA49C42A23B3CE76002E11A3 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA49C42823B3CE5B002E11A3 /* CoreFoundation.framework */; };
 		DA49C42C23B3CE85002E11A3 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA49C42423B3CE4B002E11A3 /* IOKit.framework */; };
@@ -46,6 +47,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		DA0079D8246479FF00FD21FE /* IOPowerSource.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IOPowerSource.cpp; sourceTree = "<group>"; };
+		DA0079D9246479FF00FD21FE /* IOPowerSource.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IOPowerSource.hpp; sourceTree = "<group>"; };
 		DA286394245CBF52002D008B /* cxxopts.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = cxxopts.hpp; sourceTree = "<group>"; };
 		DA4706FD23B4E3120092676D /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		DA49C42423B3CE4B002E11A3 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
@@ -87,6 +90,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DA0079DC24647A2300FD21FE /* IOPowerSource */ = {
+			isa = PBXGroup;
+			children = (
+				DA0079D9246479FF00FD21FE /* IOPowerSource.hpp */,
+			);
+			path = IOPowerSource;
+			sourceTree = "<group>";
+		};
+		DA0079DD24647A2D00FD21FE /* IOPowerSource */ = {
+			isa = PBXGroup;
+			children = (
+				DA0079D8246479FF00FD21FE /* IOPowerSource.cpp */,
+			);
+			path = IOPowerSource;
+			sourceTree = "<group>";
+		};
 		DA28638E245CBF52002D008B /* vendor */ = {
 			isa = PBXGroup;
 			children = (
@@ -117,6 +136,7 @@
 			isa = PBXGroup;
 			children = (
 				DA6EF2D4245C9125002EBB83 /* Awaken.cpp */,
+				DA0079DD24647A2D00FD21FE /* IOPowerSource */,
 				DA6EF2D5245C9125002EBB83 /* IOPowerAssertion */,
 				DA6EF2D9245C9125002EBB83 /* Waiter */,
 			);
@@ -145,6 +165,7 @@
 			children = (
 				DA6EF2E7245C9125002EBB83 /* Awaken.hpp */,
 				DA6EF2E8245C9125002EBB83 /* Log.hpp */,
+				DA0079DC24647A2300FD21FE /* IOPowerSource */,
 				DA6EF2DE245C9125002EBB83 /* IOPowerAssertion */,
 				DA6EF2E2245C9125002EBB83 /* Waiter */,
 			);
@@ -307,6 +328,7 @@
 				DA6EF2EC245C9125002EBB83 /* ThreadWaiter.cpp in Sources */,
 				DA6EF2EB245C9125002EBB83 /* DispatchWaiter.cpp in Sources */,
 				DA6EF2E9245C9125002EBB83 /* Awaken.cpp in Sources */,
+				DA0079DB24647A0600FD21FE /* IOPowerSource.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

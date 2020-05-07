@@ -4,4 +4,5 @@ config_file = configure_file(input: 'config.h.in', output: 'config.h', configura
 project_headers += config_file
 
 subdir('IOPowerAssertion')
+subdir('IOPowerSource')
 subdir('Waiter')
