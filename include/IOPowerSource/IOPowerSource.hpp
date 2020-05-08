@@ -36,14 +36,14 @@ public:
     IOPowerSource(IOPowerSource&&) = default;
     IOPowerSource& operator=(IOPowerSource&&) = default;
     
-#pragma mark - Properties
+#pragma mark - Battery Capacity
     
     /// Returns true if the current device has a built-in battery.
-    bool isBatteryStatusAvailable() const noexcept;
+    bool hasBattery() const noexcept;
     
     /// Returns the power source battery capacity or
     /// `CapacityUnavailable` if no capacity is available.
-    float batteryCapacity() const noexcept;
+    float capacity() const noexcept;
     
 #pragma mark - Capacity Changes
     

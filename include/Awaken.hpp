@@ -17,6 +17,7 @@
 namespace Awaken
 {
 class IOPowerAssertion;
+class IOPowerSource;
 class Waiter;
 
 /// Represents an infinite timeout duration
@@ -92,6 +93,7 @@ public:
     
 private:
     std::unique_ptr<IOPowerAssertion> _powerAssertion;
+    std::unique_ptr<IOPowerSource> _powerSource;
     std::unique_ptr<Waiter> _waiter;
 };
 

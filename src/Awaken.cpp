@@ -8,6 +8,7 @@
 
 #include "Awaken.hpp"
 #include "IOPowerAssertion/IOPowerAssertion.hpp"
+#include "IOPowerSource/IOPowerSource.hpp"
 #include "Waiter/Waiter.hpp"
 #include "Log.hpp"
 
@@ -39,6 +40,7 @@ using ::Awaken::DefaultLog;
 
 Awaken::Awaken::Awaken(string name) noexcept
     : _powerAssertion(make_unique<IOPowerAssertion>())
+    , _powerSource(make_unique<IOPowerSource>())
     , _waiter(make_unique<WaiterClass>())
 {
     this->_powerAssertion->name = name;

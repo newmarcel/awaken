@@ -62,18 +62,23 @@ static auto CopyPowerSourceDescription() -> optional<CFDictionaryRef>
 
 }
 
-#pragma mark - Properties
+#pragma mark - Battery Capacity
 
-bool IOPowerSource::isBatteryStatusAvailable() const noexcept
+bool IOPowerSource::hasBattery() const noexcept
 {
     if(auto powerSourceDescription = CopyPowerSourceDescription())
     {
-        const auto key = kIOPSTypeKey;
-        const auto internalBatteryTypeKey = kIOPSInternalBatteryType;
+        const auto key = CFSTR(kIOPSTypeKey);
+        const auto internalBatteryTypeKey = CFSTR(kIOPSInternalBatteryType);
         
-        auto batteryType = CFDictionaryGetValue(*powerSourceDescription, key);
+        auto batteryType = static_cast<CFStringRef>(CFDictionaryGetValue(*powerSourceDescription, key));
+        if(batteryType == NULL)
+        {
+            CFRelease(*powerSourceDescription);
+            return false;
+        }
         
-        const auto isInternalBattery = CFEqual(batteryType, internalBatteryTypeKey);
+        const bool isInternalBattery = CFEqual(batteryType, internalBatteryTypeKey);
         CFRelease(*powerSourceDescription);
         
         return isInternalBattery;
@@ -84,27 +89,28 @@ bool IOPowerSource::isBatteryStatusAvailable() const noexcept
     }
 }
 
-float IOPowerSource::batteryCapacity() const noexcept
+float IOPowerSource::capacity() const noexcept
 {
-    abort();
-    
-    //- (CGFloat)currentCapacity
-    //{
-    //    KYA_AUTO powerSourceInfos = [self powerSourceInfos];
-    //    if(powerSourceInfos == nil)
-    //    {
-    //        return KYABatteryStatusUnavailable;
-    //    }
-    //
-    //    KYA_AUTO key = [NSString stringWithUTF8String:kIOPSCurrentCapacityKey];
-    //    NSNumber *capacity = powerSourceInfos[key];
-    //    if(capacity == nil)
-    //    {
-    //        return KYABatteryStatusUnavailable;
-    //    }
-    //
-    //    return capacity.floatValue;
-    //}
+    if(auto powerSourceDescription = CopyPowerSourceDescription())
+    {
+        const auto key = CFSTR(kIOPSCurrentCapacityKey);
+        const auto capacity = static_cast<CFNumberRef>(CFDictionaryGetValue(*powerSourceDescription, key));
+        if(capacity == nullptr)
+        {
+            CFRelease(*powerSourceDescription);
+            return CapacityUnavailable;
+        }
+        
+        float capacityValue = CapacityUnavailable;
+        CFNumberGetValue(capacity, kCFNumberFloatType, &capacityValue);
+        CFRelease(*powerSourceDescription);
+        
+        return capacityValue;
+    }
+    else
+    {
+        return CapacityUnavailable;
+    }
 }
 
 #pragma mark - Capacity Changes
