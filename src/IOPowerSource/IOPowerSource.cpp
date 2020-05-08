@@ -19,15 +19,13 @@ using namespace Awaken;
 
 IOPowerSource::IOPowerSource() noexcept
     : _capacityChangeHandler(nullopt)
+    , _runLoopSource(nullptr)
 {
 }
 
 IOPowerSource::~IOPowerSource() noexcept
 {
-    //- (void)dealloc
-    //{
-    //    [self unregisterFromCapacityChanges];
-    //}
+    this->unregisterFromCapacityChanges();
 }
 
 #pragma mark - Power Source Infos
@@ -81,6 +79,7 @@ bool IOPowerSource::hasBattery() const noexcept
         const bool isInternalBattery = CFEqual(batteryType, internalBatteryTypeKey);
         CFRelease(*powerSourceDescription);
         
+        os_log(DefaultLog, "Device has internal battery: %{public}d", isInternalBattery);
         return isInternalBattery;
     }
     else
@@ -105,6 +104,7 @@ float IOPowerSource::capacity() const noexcept
         CFNumberGetValue(capacity, kCFNumberFloatType, &capacityValue);
         CFRelease(*powerSourceDescription);
         
+        os_log(DefaultLog, "Battery Capacity: %{public}f", capacityValue);
         return capacityValue;
     }
     else
@@ -115,59 +115,52 @@ float IOPowerSource::capacity() const noexcept
 
 #pragma mark - Capacity Changes
 
-// Reference Sources for KYABatteryStatus.m
+void IOPowerSource::_batteryCapacityDidChange(void* context)
+{
+    os_log(DefaultLog, "Capacity did change…");
+    
+    const auto powerSource = static_cast<IOPowerSource *>(context);
+    
+    if(const auto& capacityChangeHandler = powerSource->_capacityChangeHandler)
+    {
+        const auto capacity = powerSource->capacity();
+        (*capacityChangeHandler)(capacity);
+    }
+}
 
-//static void KYABatteryStatusChangeHandler(void *context);
-//
-//@interface KYABatteryStatus ()
-//@property (nonatomic, nullable) CFRunLoopSourceRef runLoopSource;
-//@end
-//
-//@implementation KYABatteryStatus
-//
+void IOPowerSource::setCapacityChangeHandler(std::function<void(float)>&& capacityChangeHandler) noexcept
+{
+    this->_capacityChangeHandler = capacityChangeHandler;
+}
 
-//
+bool IOPowerSource::registerForCapacityChanges() noexcept
+{
+    if(this->_runLoopSource != nullptr)
+    {
+        os_log(DefaultLog, "Already registered for capacity changes.");
+        return false;
+    }
+    
+    const auto runLoopSource = IOPSNotificationCreateRunLoopSource(this->_batteryCapacityDidChange, (void*)this);
+    CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, kCFRunLoopDefaultMode);
+    
+    this->_runLoopSource = runLoopSource;
+    
+    return true;
+}
 
-//
-
-//
-//
-//#pragma mark - Capacity Change Handler
-//
-//- (void)registerForCapacityChangesIfNeeded
-//{
-//    if(self.runLoopSource)
-//    {
-//        return;
-//    }
-//
-//    KYA_AUTO runLoopSource = IOPSNotificationCreateRunLoopSource(KYABatteryStatusChangeHandler, (__bridge void *)self);
-//    CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, kCFRunLoopDefaultMode);
-//
-//    self.runLoopSource = runLoopSource;
-//    CFRelease(runLoopSource);
-//}
-//
-//- (void)unregisterFromCapacityChanges
-//{
-//    if(!self.runLoopSource)
-//    {
-//        return;
-//    }
-//
-//    CFRunLoopRemoveSource(CFRunLoopGetCurrent(), self.runLoopSource, kCFRunLoopDefaultMode);
-//    self.runLoopSource = nil;
-//}
-//
-//@end
-//
-//#pragma mark - KYABatteryStatusChangeHandler
-//
-//static void KYABatteryStatusChangeHandler(void *context)
-//{
-//    KYA_AUTO batteryStatus = (__bridge KYABatteryStatus *)context;
-//    if(batteryStatus.capacityChangeHandler)
-//    {
-//        batteryStatus.capacityChangeHandler(batteryStatus.currentCapacity);
-//    }
-//}
+bool IOPowerSource::unregisterFromCapacityChanges() noexcept
+{
+    if(this->_runLoopSource == nullptr)
+    {
+        os_log(DefaultLog, "Not registered for capacity changes.");
+        return false;
+    }
+    
+    CFRunLoopSourceRef source = static_cast<CFRunLoopSourceRef>(this->_runLoopSource);
+    CFRunLoopRemoveSource(CFRunLoopGetCurrent(), source, kCFRunLoopDefaultMode);
+    CFRelease(source);
+    this->_runLoopSource = nullptr;
+    
+    return true;
+}

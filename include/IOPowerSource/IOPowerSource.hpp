@@ -62,7 +62,10 @@ public:
     bool unregisterFromCapacityChanges() noexcept;
     
 private:
-    std::optional<std::function<void()>> _capacityChangeHandler;
+    std::optional<std::function<void(float)>> _capacityChangeHandler;
+    void* _runLoopSource;
+    
+    static void _batteryCapacityDidChange(void* context);
 };
 
 }
