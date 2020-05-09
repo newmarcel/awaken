@@ -1,6 +1,7 @@
 # Changelog
 
 ## 1.1.0
+- added the `-v` parameter and the `Awaken::version()` property to print version information
 - added the `-b` parameter to set a minimum battery level that causes the sleep assertion to expire
 
 ## 1.0.0: First Release (2020-05-02)
