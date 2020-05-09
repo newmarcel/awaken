@@ -63,9 +63,8 @@ public:
     
 private:
     std::optional<std::function<void(float)>> _capacityChangeHandler;
-    void* _runLoopSource;
-    
-    static void _batteryCapacityDidChange(void* context);
+    void* _dispatchQueue;
+    int _notificationToken;
 };
 
 }

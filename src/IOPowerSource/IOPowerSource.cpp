@@ -8,8 +8,10 @@
 
 #include "IOPowerSource/IOPowerSource.hpp"
 #include <CoreFoundation/CoreFoundation.h>
-#import <IOKit/ps/IOPSKeys.h>
-#import <IOKit/ps/IOPowerSources.h>
+#include <dispatch/dispatch.h>
+#include <notify.h>
+#include <IOKit/ps/IOPSKeys.h>
+#include <IOKit/ps/IOPowerSources.h>
 #include "Log.hpp"
 
 using namespace std;
@@ -19,7 +21,8 @@ using namespace Awaken;
 
 IOPowerSource::IOPowerSource() noexcept
     : _capacityChangeHandler(nullopt)
-    , _runLoopSource(nullptr)
+    , _dispatchQueue(nullptr)
+    , _notificationToken(0)
 {
 }
 
@@ -115,19 +118,6 @@ float IOPowerSource::capacity() const noexcept
 
 #pragma mark - Capacity Changes
 
-void IOPowerSource::_batteryCapacityDidChange(void* context)
-{
-    os_log(DefaultLog, "Capacity did change…");
-    
-    const auto powerSource = static_cast<IOPowerSource *>(context);
-    
-    if(const auto& capacityChangeHandler = powerSource->_capacityChangeHandler)
-    {
-        const auto capacity = powerSource->capacity();
-        (*capacityChangeHandler)(capacity);
-    }
-}
-
 void IOPowerSource::setCapacityChangeHandler(std::function<void(float)>&& capacityChangeHandler) noexcept
 {
     this->_capacityChangeHandler = capacityChangeHandler;
@@ -135,32 +125,47 @@ void IOPowerSource::setCapacityChangeHandler(std::function<void(float)>&& capaci
 
 bool IOPowerSource::registerForCapacityChanges() noexcept
 {
-    if(this->_runLoopSource != nullptr)
+    if(this->_notificationToken != 0)
     {
         os_log(DefaultLog, "Already registered for capacity changes.");
         return false;
     }
     
-    const auto runLoopSource = IOPSNotificationCreateRunLoopSource(this->_batteryCapacityDidChange, (void*)this);
-    CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, kCFRunLoopDefaultMode);
+    const auto dispatchQueue = dispatch_queue_create("info.marcel-dierkes.Awaken.IOPowerSourceQueue",
+                                                     DISPATCH_QUEUE_SERIAL);
+    this->_dispatchQueue = dispatchQueue;
     
-    this->_runLoopSource = runLoopSource;
+    auto capacityDidChange = [this](){
+        if(const auto& capacityChangeHandler = this->_capacityChangeHandler)
+        {
+            const auto capacity = this->capacity();
+            os_log(DefaultLog, "Capacity did change… %{public}f", capacity);
+            (*capacityChangeHandler)(capacity);
+        }
+    };
+    
+    notify_register_dispatch(kIOPSTimeRemainingNotificationKey, &this->_notificationToken, dispatchQueue, ^(int token) {
+        capacityDidChange();
+    });
     
     return true;
 }
 
 bool IOPowerSource::unregisterFromCapacityChanges() noexcept
 {
-    if(this->_runLoopSource == nullptr)
+    if(this->_notificationToken == 0)
     {
         os_log(DefaultLog, "Not registered for capacity changes.");
         return false;
     }
+    else
+    {
+        notify_cancel(this->_notificationToken);
+    }
     
-    CFRunLoopSourceRef source = static_cast<CFRunLoopSourceRef>(this->_runLoopSource);
-    CFRunLoopRemoveSource(CFRunLoopGetCurrent(), source, kCFRunLoopDefaultMode);
-    CFRelease(source);
-    this->_runLoopSource = nullptr;
+    const auto dispatchQueue = static_cast<dispatch_queue_t>(this->_dispatchQueue);
+    dispatch_release(dispatchQueue);
+    this->_dispatchQueue = nullptr;
     
     return true;
 }
