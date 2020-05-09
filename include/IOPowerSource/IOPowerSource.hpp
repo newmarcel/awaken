@@ -62,6 +62,7 @@ public:
     bool unregisterFromCapacityChanges() noexcept;
     
 private:
+    float _capacity;
     std::optional<std::function<void(float)>> _capacityChangeHandler;
     void* _dispatchQueue;
     int _notificationToken;

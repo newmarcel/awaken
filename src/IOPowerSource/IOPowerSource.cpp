@@ -20,7 +20,8 @@ using namespace Awaken;
 #pragma mark - Life Cycle
 
 IOPowerSource::IOPowerSource() noexcept
-    : _capacityChangeHandler(nullopt)
+    : _capacity(CapacityUnavailable)
+    , _capacityChangeHandler(nullopt)
     , _dispatchQueue(nullptr)
     , _notificationToken(0)
 {
@@ -107,7 +108,7 @@ float IOPowerSource::capacity() const noexcept
         CFNumberGetValue(capacity, kCFNumberFloatType, &capacityValue);
         CFRelease(*powerSourceDescription);
         
-        os_log(DefaultLog, "Battery Capacity: %{public}f", capacityValue);
+        os_log(DefaultLog, "Battery Capacity: %{public}.00f", capacityValue);
         return capacityValue;
     }
     else
@@ -136,11 +137,21 @@ bool IOPowerSource::registerForCapacityChanges() noexcept
     this->_dispatchQueue = dispatchQueue;
     
     auto capacityDidChange = [this](){
-        if(const auto& capacityChangeHandler = this->_capacityChangeHandler)
+        const auto capacity = this->capacity();
+        
+        if(capacity != this->_capacity)
         {
-            const auto capacity = this->capacity();
-            os_log(DefaultLog, "Capacity did change… %{public}f", capacity);
-            (*capacityChangeHandler)(capacity);
+            os_log(DefaultLog, "Capacity did change… %{public}.00f", capacity);
+            this->_capacity = capacity;
+            
+            if(const auto& capacityChangeHandler = this->_capacityChangeHandler)
+            {
+                (*capacityChangeHandler)(capacity);
+            }
+        }
+        else
+        {
+            os_log(DefaultLog, "Capacity did NOT change… %{public}.00f", capacity);
         }
     };
     
@@ -161,7 +172,10 @@ bool IOPowerSource::unregisterFromCapacityChanges() noexcept
     else
     {
         notify_cancel(this->_notificationToken);
+        this->_notificationToken = 0;
     }
+    
+    this->_capacity = CapacityUnavailable;
     
     const auto dispatchQueue = static_cast<dispatch_queue_t>(this->_dispatchQueue);
     dispatch_release(dispatchQueue);
