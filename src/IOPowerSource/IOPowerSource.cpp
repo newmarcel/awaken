@@ -132,6 +132,8 @@ bool IOPowerSource::registerForCapacityChanges() noexcept
         return false;
     }
     
+    os_log(DefaultLog, "Registering for battery capacity changes…");
+    
     const auto dispatchQueue = dispatch_queue_create("info.marcel-dierkes.Awaken.IOPowerSourceQueue",
                                                      DISPATCH_QUEUE_SERIAL);
     this->_dispatchQueue = dispatchQueue;
@@ -180,6 +182,8 @@ bool IOPowerSource::unregisterFromCapacityChanges() noexcept
     const auto dispatchQueue = static_cast<dispatch_queue_t>(this->_dispatchQueue);
     dispatch_release(dispatchQueue);
     this->_dispatchQueue = nullptr;
+    
+    os_log(DefaultLog, "Unregistered from battery capacity changes.");
     
     return true;
 }

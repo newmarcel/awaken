@@ -131,6 +131,7 @@ bool Awaken::Awaken::hasBattery() const noexcept
 
 void Awaken::Awaken::setMinimumBatteryCapacity(float capacity) noexcept
 {
+    os_log(DefaultLog, "Setting minimum battery capacity to %{public}.00f…", capacity);
     this->_minimumBatteryCapacity = capacity;
 }
 

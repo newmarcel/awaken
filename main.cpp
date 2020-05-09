@@ -13,7 +13,7 @@
 #include "Awaken.hpp"
 #include "cxxopts/cxxopts.hpp"
 
-void runAwaken(std::chrono::seconds timeout, bool preventDisplaySleep, bool preventSystemSleep)
+void runAwaken(std::chrono::seconds timeout, bool preventDisplaySleep, bool preventSystemSleep, std::optional<float> minimumBatteryCapacity)
 {
 //    __block
     auto awaken = Awaken::Awaken("Awaken CLI");
@@ -23,10 +23,13 @@ void runAwaken(std::chrono::seconds timeout, bool preventDisplaySleep, bool prev
     using namespace std::chrono_literals;
     awaken.setTimeout(timeout);
     
-    awaken.setMinimumBatteryCapacity(97.0f);
-    awaken.setMinimumBatteryCapacityReachedHandler([](float capacity) {
-        printf("Fire.\n");
-    });
+    if(const auto capacity = minimumBatteryCapacity)
+    {
+        awaken.setMinimumBatteryCapacity(*minimumBatteryCapacity);
+        awaken.setMinimumBatteryCapacityReachedHandler([](float capacity) {
+            printf("Minimum battery capacity reached %.00f.\n", capacity);
+        });
+    }
     
     awaken.setTimeoutHandler([]{
         exit(EXIT_SUCCESS);
@@ -90,6 +93,7 @@ int main(int argc, char **argv)
     std::chrono::seconds timeout { 0 };
     bool preventDisplaySleep = false;
     bool preventSystemSleep = false;
+    std::optional<float> minimumBatteryCapacity = std::nullopt;
     
     if(result.count("display-sleep"))
     {
@@ -121,11 +125,10 @@ int main(int argc, char **argv)
             printf("Unsupported battery percentage '%d' provided.\n", batteryLevel);
             exit(EXIT_FAILURE);
         }
-        
-        printf("Expiration Battery Level: %d\n", batteryLevel);
+        minimumBatteryCapacity = static_cast<float>(batteryLevel);
     }
     
-    runAwaken(timeout, preventDisplaySleep, preventSystemSleep);
+    runAwaken(timeout, preventDisplaySleep, preventSystemSleep, minimumBatteryCapacity);
     
     return EXIT_SUCCESS;
 }
