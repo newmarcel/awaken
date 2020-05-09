@@ -10,7 +10,12 @@
 #include "IOPowerAssertion/IOPowerAssertion.hpp"
 #include "Waiter/Waiter.hpp"
 #include "Log.hpp"
+
+#if __has_include("config.h")
 #include "config.h"
+#else
+#define AWAKEN_VERSION "current"
+#endif
 
 #define USE_DISPATCH_WAITER 0
 #if USE_DISPATCH_WAITER

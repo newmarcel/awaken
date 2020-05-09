@@ -49,9 +49,18 @@ cxxopts::ParseResult parseArguments(int argc, char* argv[])
         ("t,timeout", "timeout in seconds until the sleep assertion expires", cxxopts::value<int64_t>()->default_value("0"), "N")
         ;
         
-        options.add_options("Help") ("h,help", "print this help");
+        options.add_options("Help")
+        ("h,help", "print this help")
+        ("v,version", "print version information")
+        ;
         
         const auto result = options.parse(argc, argv);
+        
+        if(result.count("version"))
+        {
+            std::cout << "Awaken " << Awaken::Awaken::version() << std::endl;
+            exit(EXIT_SUCCESS);
+        }
         
         if(result.count("help"))
         {
