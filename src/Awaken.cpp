@@ -38,14 +38,6 @@ Awaken::Awaken::Awaken(string name) noexcept
     , _waiter(make_unique<WaiterClass>())
 {
     this->_powerAssertion->name = name;
-    
-    this->_powerSource->registerForCapacityChanges();
-    float cap = this->_powerSource->capacity();
-    bool is = this->_powerSource->hasBattery();
-    float cap2 = this->_powerSource->capacity();
-    this->_powerSource->setCapacityChangeHandler([](float capacity) {
-        os_log(DefaultLog, "Capacity changed %{public}.00f", capacity);
-    });
 }
 
 Awaken::Awaken::Awaken() noexcept : Awaken::Awaken::Awaken("Awaken") {};
@@ -133,16 +125,47 @@ void Awaken::Awaken::setTimeoutHandler(function<void()>&& timeoutHandler) noexce
 #pragma mark - Minimum Battery Capacity
 
 bool Awaken::Awaken::hasBattery() const noexcept
-{ return false; }
+{
+    return this->_powerSource->hasBattery();
+}
 
 void Awaken::Awaken::setMinimumBatteryCapacity(float capacity) noexcept
-{}
+{
+    this->_minimumBatteryCapacity = capacity;
+}
 
 float Awaken::Awaken::minimumBatteryCapacity() const noexcept
-{ return IOPowerSource::CapacityUnavailable; }
+{
+    return this->_minimumBatteryCapacity;
+}
 
 void Awaken::Awaken::setMinimumBatteryCapacityReachedHandler(std::function<void(float)>&& handler) noexcept
-{}
+{
+    if(handler != nullptr)
+    {
+        if(!this->_powerSource->hasBattery())
+        {
+            os_log(DefaultLog, "Current device does not support a minimum battery capacity.");
+            return;
+        }
+        
+        const float currentMinimumCapacity = this->_minimumBatteryCapacity;
+        this->_powerSource->setCapacityChangeHandler([handler, currentMinimumCapacity, this](float capacity) {
+            if(capacity <= currentMinimumCapacity)
+            {
+                os_log(DefaultLog, "Minimum battery capacity reached: %{public}.00f", capacity);
+                handler(capacity);
+                this->cancel();
+            }
+        });
+        this->_powerSource->registerForCapacityChanges();
+    }
+    else
+    {
+        this->_powerSource->unregisterFromCapacityChanges();
+        this->_powerSource->setCapacityChangeHandler(nullptr);
+    }
+}
 
 #pragma mark - Running
 
@@ -177,4 +200,5 @@ void Awaken::Awaken::cancel() noexcept
     {
         os_log(DefaultLog, "Failed to cancel power assertion.");
     }
+    this->_powerSource->setCapacityChangeHandler(nullptr);
 }

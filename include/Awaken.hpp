@@ -94,8 +94,6 @@ public:
     /// Returns the minimum battery capacity limit. If the
     /// current devices reaches this limit, the sleep assertions
     /// will be released. (e.g. 20.0f for 20 % capacity)
-    /// @note A negative value is returned if the current
-    ///       device does not have a built-in battery.
     float minimumBatteryCapacity() const noexcept;
     
     /// An optional handler that will be called when the battery
@@ -119,6 +117,7 @@ private:
     std::unique_ptr<IOPowerAssertion> _powerAssertion;
     std::unique_ptr<IOPowerSource> _powerSource;
     std::unique_ptr<Waiter> _waiter;
+    float _minimumBatteryCapacity;
 };
 
 }

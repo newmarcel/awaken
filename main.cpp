@@ -23,6 +23,11 @@ void runAwaken(std::chrono::seconds timeout, bool preventDisplaySleep, bool prev
     using namespace std::chrono_literals;
     awaken.setTimeout(timeout);
     
+    awaken.setMinimumBatteryCapacity(97.0f);
+    awaken.setMinimumBatteryCapacityReachedHandler([](float capacity) {
+        printf("Fire.\n");
+    });
+    
     awaken.setTimeoutHandler([]{
         exit(EXIT_SUCCESS);
     });
