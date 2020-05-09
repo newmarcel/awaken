@@ -10,6 +10,7 @@
 #include "IOPowerAssertion/IOPowerAssertion.hpp"
 #include "Waiter/Waiter.hpp"
 #include "Log.hpp"
+#include "config.h"
 
 #define USE_DISPATCH_WAITER 0
 #if USE_DISPATCH_WAITER
@@ -51,6 +52,11 @@ Awaken::Awaken::Awaken(Awaken&& other) noexcept
 Awaken::Awaken& Awaken::Awaken::operator=(Awaken&& other) noexcept = default;
 
 #pragma mark - Properties
+
+std::string Awaken::Awaken::version() noexcept
+{
+    return AWAKEN_VERSION;
+}
 
 bool Awaken::Awaken::setTimeout(std::chrono::seconds timeout) noexcept
 {

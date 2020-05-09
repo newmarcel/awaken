@@ -41,6 +41,8 @@ public:
     Awaken& operator=(Awaken&&) noexcept;
     
 #pragma mark - Properties
+
+    static std::string version() noexcept;
     
     /// Returns the tool name used in system logs
     std::string name() const noexcept;
