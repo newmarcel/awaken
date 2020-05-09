@@ -47,6 +47,7 @@ cxxopts::ParseResult parseArguments(int argc, char* argv[])
         ("d,display-sleep", "prevent the display from idle sleeping", cxxopts::value<bool>()->default_value("false"))
         ("s,system-sleep", "prevent the system from idle sleeping", cxxopts::value<bool>()->default_value("true"))
         ("t,timeout", "timeout in seconds until the sleep assertion expires", cxxopts::value<int64_t>()->default_value("0"), "N")
+        ("b,battery-level", "a minimum battery level on devices with a built-in battery that causes the sleep assertion to expire (e.g. 0.2 for <= 20% remaining battery)", cxxopts::value<float>()->default_value("0.0"), "F")
         ;
         
         options.add_options("Help")
@@ -105,6 +106,12 @@ int main(int argc, char **argv)
     {
         auto customTimeout = result["timeout"].as<int64_t>();
         timeout = std::chrono::seconds { customTimeout };
+    }
+    
+    if(result.count("battery-level"))
+    {
+        auto batteryLevel = result["battery-level"].as<float>();
+        printf("Expiration Battery Level: %f\n", batteryLevel);
     }
     
     runAwaken(timeout, preventDisplaySleep, preventSystemSleep);

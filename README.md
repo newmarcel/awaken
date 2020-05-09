@@ -22,8 +22,12 @@ Usage:
 
   -d, --display-sleep  prevent the display from idle sleeping
   -s, --system-sleep   prevent the system from idle sleeping (default: true)
+                         true)
   -t, --timeout N      timeout in seconds until the sleep assertion expires
                        (default: 0)
+  -b, --battery-level F  a minimum battery level on devices with a built-in
+                         battery that causes the sleep assertion to expire
+                         (e.g. 0.2 for <= 20% remaining battery) (default: 0.0)
 
  Help options:
   -h, --help     print this help
