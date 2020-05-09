@@ -21,16 +21,10 @@
 #define USE_DISPATCH_WAITER 0
 #if USE_DISPATCH_WAITER
 #include "Waiter/DispatchWaiter.hpp"
-namespace Awaken
-{
-using WaiterClass = DispatchWaiter;
-}
+namespace Awaken { using WaiterClass = DispatchWaiter; }
 #else
 #include "Waiter/ThreadWaiter.hpp"
-namespace Awaken
-{
-using WaiterClass = ThreadWaiter;
-}
+namespace Awaken { using WaiterClass = ThreadWaiter; }
 #endif
 
 using namespace std;
@@ -60,6 +54,7 @@ Awaken::Awaken::~Awaken() noexcept = default;
 
 Awaken::Awaken::Awaken(Awaken&& other) noexcept
     : _powerAssertion(move(other._powerAssertion))
+    , _powerSource(move(other._powerSource))
     , _waiter(move(other._waiter))
 {
 }
