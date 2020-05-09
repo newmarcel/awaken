@@ -58,7 +58,7 @@ static auto CopyPowerSourceDescription() -> optional<CFDictionaryRef>
     CFRelease(sourcesList);
     CFRelease(powerSources);
     
-    if(powerSource == NULL) { return nullopt; }
+    if(powerSource == nullptr) { return nullopt; }
     return powerSource;
 }
 
@@ -74,7 +74,7 @@ bool IOPowerSource::hasBattery() const noexcept
         const auto internalBatteryTypeKey = CFSTR(kIOPSInternalBatteryType);
         
         auto batteryType = static_cast<CFStringRef>(CFDictionaryGetValue(*powerSourceDescription, key));
-        if(batteryType == NULL)
+        if(batteryType == nullptr)
         {
             CFRelease(*powerSourceDescription);
             return false;
