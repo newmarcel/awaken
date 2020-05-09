@@ -29,6 +29,9 @@ Usage:
   -h, —-help  print this help
 ```
 
+## Documentation
+You can use [doxygen](http://www.doxygen.nl) (`brew install doxygen`) to generate the class documentation for this project.
+
 ## Why Is This Written in C++17 Instead of C, Objective-C or Swift?
 I started learning modern C++ a while ago and have never published a project in pure C++17 before using a modern build system I wanted to try: `meson`.
 I don’t rule out alternative implementations in `C`, `Rust` or `Swift` at all, it just depends on my own motivation to try these 😀.
