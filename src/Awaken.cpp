@@ -37,7 +37,7 @@ using ::Awaken::DefaultLog;
 
 #pragma mark - Life Cycle
 
-Awaken::Awaken::Awaken(std::string name) noexcept
+Awaken::Awaken::Awaken(string name) noexcept
     : _powerAssertion(make_unique<IOPowerAssertion>())
     , _waiter(make_unique<WaiterClass>())
 {
@@ -58,12 +58,12 @@ Awaken::Awaken& Awaken::Awaken::operator=(Awaken&& other) noexcept = default;
 
 #pragma mark - Properties
 
-std::string Awaken::Awaken::version() noexcept
+string Awaken::Awaken::version() noexcept
 {
     return AWAKEN_VERSION;
 }
 
-bool Awaken::Awaken::setTimeout(std::chrono::seconds timeout) noexcept
+bool Awaken::Awaken::setTimeout(chrono::seconds timeout) noexcept
 {
     if(this->isRunning())
     {
@@ -77,12 +77,12 @@ bool Awaken::Awaken::setTimeout(std::chrono::seconds timeout) noexcept
     return true;
 }
 
-std::chrono::seconds Awaken::Awaken::timeout() const noexcept
+chrono::seconds Awaken::Awaken::timeout() const noexcept
 {
     return this->_powerAssertion->timeout;
 }
 
-void Awaken::Awaken::setTimeoutHandler(std::function<void()>&& timeoutHandler) noexcept
+void Awaken::Awaken::setTimeoutHandler(function<void()>&& timeoutHandler) noexcept
 {
     this->_waiter->setTimeoutHandler(move(timeoutHandler));
 }
