@@ -44,6 +44,14 @@ Awaken::Awaken::Awaken(string name) noexcept
     , _waiter(make_unique<WaiterClass>())
 {
     this->_powerAssertion->name = name;
+    
+    this->_powerSource->registerForCapacityChanges();
+    float cap = this->_powerSource->capacity();
+    bool is = this->_powerSource->hasBattery();
+    float cap2 = this->_powerSource->capacity();
+    this->_powerSource->setCapacityChangeHandler([](float capacity) {
+        os_log(DefaultLog, "Capacity changed %{public}.00f", capacity);
+    });
 }
 
 Awaken::Awaken::Awaken() noexcept : Awaken::Awaken::Awaken("Awaken") {};
