@@ -49,20 +49,6 @@ public:
     /// Returns the tool name used in system logs
     std::string name() const noexcept;
     
-    /// Sets the timeout for the selected power assertions.
-    /// @param timeout A timeout in seconds, if set to 0 or InfiniteTimeout,
-    ///                it will be assumed to be an indefinite timeout.
-    /// @returns true if the timeout could be modified.
-    bool setTimeout(std::chrono::seconds timeout) noexcept;
-    /// The timeout for the selected power assertions.
-    /// A value of 0 (aka InfiniteTimeout) represents
-    /// an indefinite timeout.
-    std::chrono::seconds timeout() const noexcept;
-    
-    /// Sets an optional timeout handler that will be called
-    /// on a private thread when the timeout is reached.
-    void setTimeoutHandler(std::function<void()>&&) noexcept;
-    
     /// Prevents the system from sleeping automatically
     /// due to a lack of user activity if set to true.
     /// @param value prevent system sleep when true
@@ -77,6 +63,44 @@ public:
     bool setPreventUserIdleDisplaySleep(bool value) noexcept;
     /// Prevents the display from dimming automatically if true.
     bool preventUserIdleDisplaySleep() const noexcept;
+    
+#pragma mark - Timeout
+    
+    /// Sets the timeout for the selected power assertions.
+    /// @param timeout A timeout in seconds, if set to 0 or InfiniteTimeout,
+    ///                it will be assumed to be an indefinite timeout.
+    /// @returns true if the timeout could be modified.
+    bool setTimeout(std::chrono::seconds timeout) noexcept;
+    /// The timeout for the selected power assertions.
+    /// A value of 0 (aka InfiniteTimeout) represents
+    /// an indefinite timeout.
+    std::chrono::seconds timeout() const noexcept;
+    
+    /// Sets an optional timeout handler that will be called
+    /// on a private thread when the timeout is reached.
+    void setTimeoutHandler(std::function<void()>&&) noexcept;
+    
+#pragma mark - Minimum Battery Capacity
+    
+    /// Returns true if the current device has a built-in battery.
+    bool hasBattery() const noexcept;
+    
+    /// Set the minimum limit for the battery capacity,
+    /// if this capacity is reached, the sleep assertions
+    /// will be released.
+    /// @param capacity The battery capacity (e.g. 20.0f for 20 % capacity)
+    void setMinimumBatteryCapacity(float capacity) noexcept;
+    
+    /// Returns the minimum battery capacity limit. If the
+    /// current devices reaches this limit, the sleep assertions
+    /// will be released. (e.g. 20.0f for 20 % capacity)
+    /// @note A negative value is returned if the current
+    ///       device does not have a built-in battery.
+    float minimumBatteryCapacity() const noexcept;
+    
+    /// An optional handler that will be called when the battery
+    /// capacity reaches the `minimumBatteryCapacity()`.
+    void setMinimumBatteryCapacityReachedHandler(std::function<void(float)>&&) noexcept;
     
 #pragma mark - Running
     

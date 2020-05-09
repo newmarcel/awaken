@@ -68,30 +68,6 @@ string Awaken::Awaken::version() noexcept
     return AWAKEN_VERSION;
 }
 
-bool Awaken::Awaken::setTimeout(chrono::seconds timeout) noexcept
-{
-    if(this->isRunning())
-    {
-        os_log(DefaultLog, "The timeout cannot be modified while running.");
-        return false;
-    }
-    
-    this->_waiter->setTimeout(timeout);
-    this->_powerAssertion->timeout = move(timeout);
-    
-    return true;
-}
-
-chrono::seconds Awaken::Awaken::timeout() const noexcept
-{
-    return this->_powerAssertion->timeout;
-}
-
-void Awaken::Awaken::setTimeoutHandler(function<void()>&& timeoutHandler) noexcept
-{
-    this->_waiter->setTimeoutHandler(move(timeoutHandler));
-}
-
 bool Awaken::Awaken::setPreventUserIdleSystemSleep(bool preventUserIdleSystemSleep) noexcept
 {
     if(this->isRunning())
@@ -127,6 +103,46 @@ bool Awaken::Awaken::preventUserIdleDisplaySleep() const noexcept
 {
     return this->_powerAssertion->preventUserIdleDisplaySleep;
 }
+
+#pragma mark - Timeout
+
+bool Awaken::Awaken::setTimeout(chrono::seconds timeout) noexcept
+{
+    if(this->isRunning())
+    {
+        os_log(DefaultLog, "The timeout cannot be modified while running.");
+        return false;
+    }
+    
+    this->_waiter->setTimeout(timeout);
+    this->_powerAssertion->timeout = move(timeout);
+    
+    return true;
+}
+
+chrono::seconds Awaken::Awaken::timeout() const noexcept
+{
+    return this->_powerAssertion->timeout;
+}
+
+void Awaken::Awaken::setTimeoutHandler(function<void()>&& timeoutHandler) noexcept
+{
+    this->_waiter->setTimeoutHandler(move(timeoutHandler));
+}
+
+#pragma mark - Minimum Battery Capacity
+
+bool Awaken::Awaken::hasBattery() const noexcept
+{ return false; }
+
+void Awaken::Awaken::setMinimumBatteryCapacity(float capacity) noexcept
+{}
+
+float Awaken::Awaken::minimumBatteryCapacity() const noexcept
+{ return IOPowerSource::CapacityUnavailable; }
+
+void Awaken::Awaken::setMinimumBatteryCapacityReachedHandler(std::function<void(float)>&& handler) noexcept
+{}
 
 #pragma mark - Running
 
