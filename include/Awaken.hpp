@@ -42,6 +42,9 @@ public:
     
 #pragma mark - Properties
     
+    /// Returns the library version
+    static std::string version() noexcept;
+    
     /// Returns the tool name used in system logs
     std::string name() const noexcept;
     

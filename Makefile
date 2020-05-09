@@ -1,4 +1,5 @@
 BUILD_DIR = build
+DOCS_DIR = docs
 DESTDIR = ~/install
 BINARY_NAME = awaken
 
@@ -6,6 +7,10 @@ default: all
 
 clean:
 	$(RM) -r $(BUILD_DIR)
+	$(RM) -r $(DOCS_DIR)
+
+$(DOCS_DIR):
+	doxygen Doxyfile
 
 build:
 	meson $(BUILD_DIR)

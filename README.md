@@ -20,13 +20,14 @@ awaken - prevents your Mac from going to sleep.
 Usage:
   ./build/awaken [OPTION...]
 
-  -d, —-display-sleep  prevent the display from idle sleeping
-  -s, —-system-sleep   prevent the system from idle sleeping (default: true)
-  -t, —-timeout N      timeout in seconds until the sleep assertion expires
+  -d, --display-sleep  prevent the display from idle sleeping
+  -s, --system-sleep   prevent the system from idle sleeping (default: true)
+  -t, --timeout N      timeout in seconds until the sleep assertion expires
                        (default: 0)
 
  Help options:
-  -h, —-help  print this help
+  -h, --help     print this help
+  -v, --version  print version information
 ```
 
 ## Documentation
