@@ -1,0 +1,82 @@
+/* Fonts */
+
+#projectname {
+    font: 3em system-ui, sans-serif;
+}
+
+#projectnumber {
+    font: 500 0.4em system-ui, sans-serif;
+}
+
+.sm-dox a, .sm-dox a:hover {
+    font: 400 1em system-ui, sans-serif;
+}
+
+#projectalign {
+    padding-left: 1em!important;
+}
+
+.sm-dox {
+    padding-left: 1em;
+}
+
+div.fragment {
+    margin-left: 0px;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+div.fragment .line {
+    line-height: 1.2em;
+}
+
+/* Borders */
+
+#titlearea {
+    border: none;
+}
+
+/* Backgrounds */
+
+div.header {
+    background-image: none;
+    background-color: transparent;
+}
+
+.navpath ul {
+    background-image: none;
+    border: none;
+    padding-left: 1em;
+    font-size: 1em;
+}
+
+.navpath li {
+    background-image: none;
+    padding: 0px;
+    padding-right: 0.6em;
+}
+
+.navpath li::after {
+    content: "\203A";
+    padding-left: 0.6em;
+}
+
+.navpath li.navelem a {
+    font-family: system-ui, sans-serif;
+    text-shadow: none;
+}
+
+.sm-dox, .sm-dox a, .sm-dox a:hover {
+    background-image: none;
+}
+
+.sm-dox a, .sm-dox a:hover {
+    padding: 0px;
+    padding-right: 10px;
+    text-shadow: none;
+    color: black;
+}
+
+.sm-dox a:hover {
+    text-decoration: underline;
+}
