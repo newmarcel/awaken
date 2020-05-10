@@ -157,7 +157,7 @@ bool IOPowerSource::registerForCapacityChanges() noexcept
         }
     };
     
-    notify_register_dispatch(kIOPSTimeRemainingNotificationKey, &this->_notificationToken, dispatchQueue, ^(int token) {
+    notify_register_dispatch(kIOPSTimeRemainingNotificationKey, &this->_notificationToken, dispatchQueue, ^(int) {
         capacityDidChange();
     });
     
