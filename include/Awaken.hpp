@@ -98,6 +98,8 @@ public:
     
     /// An optional handler that will be called when the battery
     /// capacity reaches the `minimumBatteryCapacity()`.
+    /// Any sleep assertions will be cancelled when the minimum
+    /// battery capacity is reached.
     void setMinimumBatteryCapacityReachedHandler(std::function<void(float)>&&) noexcept;
     
 #pragma mark - Running
