@@ -49,6 +49,11 @@ public:
     /// Returns the tool name used in system logs
     std::string name() const noexcept;
     
+    /// @name Power Assertions
+    /// Configures the desired power assertions to
+    /// actually keep the system or display awake.
+    /// @{
+    
     /// Prevents the system from sleeping automatically
     /// due to a lack of user activity if set to true.
     /// @param value prevent system sleep when true
@@ -64,7 +69,13 @@ public:
     /// Prevents the display from dimming automatically if true.
     bool preventUserIdleDisplaySleep() const noexcept;
     
+    /// @}
+    
 #pragma mark - Timeout
+    
+    /// @name Timeout
+    /// Configures the duration of the configured power assertions
+    /// @{
     
     /// Sets the timeout for the selected power assertions.
     /// @param timeout A timeout in seconds, if set to 0 or InfiniteTimeout,
@@ -80,7 +91,16 @@ public:
     /// on a private thread when the timeout is reached.
     void setTimeoutHandler(std::function<void()>&&) noexcept;
     
+    /// @}
+    
 #pragma mark - Minimum Battery Capacity
+    
+    /// @name Minimum Battery Capacity
+    /// Configures a minimum battery capacity threshold
+    /// until power assertions are held.
+    /// @note These properties only apply if the system
+    /// has a built-in battery.
+    /// @{
     
     /// Returns true if the current device has a built-in battery.
     bool hasBattery() const noexcept;
@@ -102,7 +122,13 @@ public:
     /// battery capacity is reached.
     void setMinimumBatteryCapacityReachedHandler(std::function<void(float)>&&) noexcept;
     
+    /// @}
+    
 #pragma mark - Running
+    
+    /// @name Running
+    /// Runs and cancels all configured power assertions.
+    /// @{
     
     /// Returns true if a sleep assertion is currently running
     bool isRunning() const noexcept;
@@ -114,6 +140,8 @@ public:
     
     /// Cancels any sleep assertions.
     void cancel() noexcept;
+    
+    /// @}
     
 private:
     std::unique_ptr<IOPowerAssertion> _powerAssertion;
