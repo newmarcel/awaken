@@ -1,5 +1,5 @@
 project('awaken', 'cpp',
-  version : '1.1.0',
+  version : '1.2.0',
   default_options : ['warning_level=3', 'c_std=c11', 'cpp_std=c++17'])
 
 config = configuration_data()
