@@ -38,14 +38,14 @@ public:
     
 #pragma mark - Properties
     
-    void setTimeout(std::chrono::seconds) noexcept;
-    void setTimeoutHandler(std::function<void()>&&) noexcept;
+    void setTimeout(std::chrono::seconds) noexcept override;
+    void setTimeoutHandler(std::function<void()>&&) noexcept override;
     
 #pragma mark - Running
     
-    bool isRunning() const noexcept;
-    bool run() noexcept;
-    bool cancel() noexcept;
+    bool isRunning() const noexcept override;
+    bool run() noexcept override;
+    bool cancel() noexcept override;
     
 private:
     std::chrono::seconds _timeout { 0 };
