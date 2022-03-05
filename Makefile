@@ -35,4 +35,14 @@ list-assertions:
 log-assertions:
 	pmset -g assertionslog
 
-.PHONY: clean build release bin run install list-assertions log-assertions
+spm-clean:
+	$(RM) -r ".build"
+	$(RM) -r ".swiftpm"
+
+spm-build:
+	swift build
+
+spm-run:
+	swift run awaken
+
+.PHONY: clean build release bin run install list-assertions log-assertions spm-clean spm-build spm-run

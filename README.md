@@ -5,7 +5,7 @@ A command line tool that prevents your Mac from going to sleep.
 `awaken` is a re-implementation of the [`caffeinate`](https://web.archive.org/web/20140604153141/https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man8/caffeinate.8.html) command line tool included in macOS. The project includes a `libawaken.a` static library to embed this behavior in other applications, like my macOS application **[KeepingYouAwake](https://github.com/newmarcel/KeepingYouAwake)**.
 
 ## Installation
-`awaken` can be built and installed using the.[`meson`](https://mesonbuild.com) build system and a `clang` compiler that supports C++17 (e.g. from a recent Xcode version). For convenience an Xcode project file is also included.
+`awaken` can be built and installed using the.[`meson`](https://mesonbuild.com) build system and a `clang` compiler that supports C++17 (e.g. from a recent Xcode version). For convenience Swift Package Manager support is also provided.
 
 ```bash
 meson build --buildtype=release
