@@ -16,7 +16,7 @@
 void runAwaken(std::chrono::seconds timeout, bool preventDisplaySleep, bool preventSystemSleep, std::optional<float> minimumBatteryCapacity)
 {
 //    __block
-    auto awaken = Awaken::Awaken("Awaken CLI");
+    auto awaken = Awaken::Awaken("awaken command-line tool");
     awaken.setPreventUserIdleSystemSleep(preventSystemSleep);
     awaken.setPreventUserIdleDisplaySleep(preventDisplaySleep);
     
