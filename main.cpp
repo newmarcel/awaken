@@ -10,7 +10,7 @@
 #include <iostream>
 #include <chrono>
 #include <dispatch/dispatch.h>
-#include "Awaken.hpp"
+#include <Awaken/Awaken.hpp>
 #include "cxxopts/cxxopts.hpp"
 
 void runAwaken(std::chrono::seconds timeout, bool preventDisplaySleep, bool preventSystemSleep, std::optional<float> minimumBatteryCapacity)

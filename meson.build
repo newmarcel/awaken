@@ -18,7 +18,7 @@ dependencies = [
   dependency('IOKit'),
 ]
 
-install_headers('include/Awaken.hpp', subdir: 'awaken')
+install_headers(project_headers, subdir: 'Awaken')
 
 lib = static_library('awaken', project_sources,
   include_directories: includes,

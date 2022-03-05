@@ -6,7 +6,7 @@
 //  Copyright © 2020 Marcel Dierkes. All rights reserved.
 //
 
-#include "IOPowerAssertion/IOPowerAssertion.hpp"
+#include <Awaken/IOPowerAssertion.hpp>
 #include <CoreFoundation/CoreFoundation.h>
 #include <IOKit/pwr_mgt/IOPMLib.h>
 #include "Log.hpp"

@@ -6,24 +6,24 @@
 //  Copyright © 2020 Marcel Dierkes. All rights reserved.
 //
 
-#include "Awaken.hpp"
-#include "IOPowerAssertion/IOPowerAssertion.hpp"
-#include "IOPowerSource/IOPowerSource.hpp"
-#include "Waiter/Waiter.hpp"
+#include <Awaken/Awaken.hpp>
+#include <Awaken/IOPowerAssertion.hpp>
+#include <Awaken/IOPowerSource.hpp>
+#include <Awaken/Waiter.hpp>
 #include "Log.hpp"
 
 #if __has_include("config.h")
-#include "config.h"
+#include <Awaken/config.h>
 #else
 #define AWAKEN_VERSION "current"
 #endif
 
 #define USE_DISPATCH_WAITER 0
 #if USE_DISPATCH_WAITER
-#include "Waiter/DispatchWaiter.hpp"
+#include <Awaken/DispatchWaiter.hpp>
 namespace Awaken { using WaiterClass = DispatchWaiter; }
 #else
-#include "Waiter/ThreadWaiter.hpp"
+#include <Awaken/ThreadWaiter.hpp>
 namespace Awaken { using WaiterClass = ThreadWaiter; }
 #endif
 

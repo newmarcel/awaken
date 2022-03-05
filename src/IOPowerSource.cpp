@@ -6,7 +6,7 @@
 //  Copyright © 2020 Marcel Dierkes. All rights reserved.
 //
 
-#include "IOPowerSource/IOPowerSource.hpp"
+#include <Awaken/IOPowerSource.hpp>
 #include <CoreFoundation/CoreFoundation.h>
 #include <dispatch/dispatch.h>
 #include <notify.h>

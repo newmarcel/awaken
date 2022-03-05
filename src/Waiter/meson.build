@@ -1,1 +1,1 @@
-project_sources += files('ThreadWaiter.cpp')
+project_sources += files(['DispatchWaiter.cpp', 'ThreadWaiter.cpp'])

@@ -1,5 +1,9 @@
-project_sources += files('Awaken.cpp')
+source_files = [
+    'Awaken.cpp',
+    'IOPowerAssertion.cpp',
+    'IOPowerSOurce.cpp',
+    'Log.hpp'
+]
+project_sources += files(source_files)
 
-subdir('IOPowerAssertion')
-subdir('IOPowerSource')
 subdir('Waiter')

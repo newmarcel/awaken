@@ -6,8 +6,8 @@
 //  Copyright © 2020 Marcel Dierkes. All rights reserved.
 //
 
-#include "DispatchWaiter.hpp"
-#include "Log.hpp"
+#include <Awaken/DispatchWaiter.hpp>
+#include "../Log.hpp"
 
 using namespace std;
 using namespace Awaken;

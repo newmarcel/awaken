@@ -1,30 +1,40 @@
 //
-//  ThreadWaiter.hpp
+//  DispatchWaiter.hpp
 //  Awaken
 //
-//  Created by Marcel Dierkes on 25.04.20.
+//  Created by Marcel Dierkes on 29.04.20.
 //  Copyright © 2020 Marcel Dierkes. All rights reserved.
 //
 
-#ifndef ThreadWaiter_hpp
-#define ThreadWaiter_hpp
+#ifndef DispatchWaiter_hpp
+#define DispatchWaiter_hpp
 
 #include <chrono>
 #include <functional>
 #include <optional>
-#include <thread>
-#include "Waiter.hpp"
+#include <dispatch/dispatch.h>
+#include <Awaken/Waiter.hpp>
 
 namespace Awaken
 {
 
-class ThreadWaiter : public Waiter
+/*
+ BROKEN. DON'T USE. YET.
+ */
+class DispatchWaiter : public Waiter
 {
 public:
     
 #pragma mark - Life Cycle
     
-    ThreadWaiter() noexcept = default;
+    DispatchWaiter() noexcept;
+    ~DispatchWaiter() noexcept;
+    
+    DispatchWaiter(const DispatchWaiter&) = delete;
+    DispatchWaiter& operator=(const DispatchWaiter&) = delete;
+    
+    DispatchWaiter(DispatchWaiter&&) = delete;
+    DispatchWaiter& operator=(DispatchWaiter&&) = delete;
     
 #pragma mark - Properties
     
@@ -41,9 +51,9 @@ private:
     std::chrono::seconds _timeout { 0 };
     std::optional<std::function<void()>> _timeoutHandler = std::nullopt;
     bool _running = false;
-    std::thread _thread;
+    dispatch_queue_t _dispatchQueue;
 };
 
 }
 
-#endif /* ThreadWaiter_hpp */
+#endif /* DispatchWaiter_hpp */
