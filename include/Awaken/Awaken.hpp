@@ -21,7 +21,7 @@ class IOPowerSource;
 class Waiter;
 
 /// Represents an infinite timeout duration
-const std::chrono::seconds InfiniteTimeout { 0 };
+constexpr std::chrono::seconds InfiniteTimeout { 0 };
 
 class Awaken
 {
