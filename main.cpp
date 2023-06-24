@@ -79,7 +79,7 @@ cxxopts::ParseResult parseArguments(int argc, char* argv[])
         
         return result;
     }
-    catch (const cxxopts::OptionException& e)
+    catch (const cxxopts::exceptions::exception& e)
     {
         std::cout << "Failed parsing options: " << e.what() << std::endl;
         exit(EXIT_FAILURE);

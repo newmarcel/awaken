@@ -3,6 +3,55 @@
 This is the changelog for `cxxopts`, a C++11 library for parsing command line
 options. The project adheres to semantic versioning.
 
+## 3.1.1
+
+### Bug Fixes
+
+* Fixed version number in header.
+
+## 3.1
+
+### Added
+
+* Support for multiple long names for the same option (= multiple long aliases)
+* Add a `program()` function to retrieve the program name.
+* Added a .clang-format file.
+* Added iterator and printing for a ParseResult.
+
+### Changed
+
+* Cleanup exception code, add cxxopts::exceptions namespace.
+
+### Bug Fixes
+
+* Fix `arguments()` having no key for options that only have a short name.
+
+## 3.0
+
+### Changed
+
+* Only search for a C++ compiler in CMakeLists.txt.
+* Allow for exceptions to be disabled.
+* Fix duplicate default options when there is a short and long option.
+* Add `CXXOPTS_NO_EXCEPTIONS` to disable exceptions.
+* Fix char parsing for space and check for length.
+* Change argument type in `Options::parse` from `char**` to `const char**`.
+* Refactor parser to not change its arguments.
+* `ParseResult` doesn't depend on a reference to the parser.
+* Fixed several warnings and code quality issues.
+* Improved formatting for help descriptions.
+* Improve integer parsing.
+
+### Added
+
+* A list of unmatched arguments is available in `ParseResult`.
+* Support single letter options with argument attached.
+* Use <optional> if it is present.
+
+### Bug Fixes
+
+* Fix missing option name in exception.
+
 ## 2.2
 
 ### Changed
