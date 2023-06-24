@@ -121,7 +121,7 @@ bool IOPowerAssertion::run() noexcept
     {
         os_log(DefaultLog, "Preventing user idle display sleep.");
         
-        const auto reason = CFSTR("preventing user idle system sleep");
+        const auto reason = CFSTR("preventing user idle display sleep");
         IOPMAssertionID assertionID = 0;
         auto assertionName = CoreFoundationString(this->name);
         auto result = IOPMAssertionCreateWithDescription(kIOPMAssertionTypePreventUserIdleDisplaySleep,
