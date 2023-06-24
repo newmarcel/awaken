@@ -45,9 +45,9 @@ Awaken::Awaken::Awaken() noexcept : Awaken::Awaken::Awaken("Awaken") {};
 Awaken::Awaken::~Awaken() noexcept = default;
 
 Awaken::Awaken::Awaken(Awaken&& other) noexcept
-    : _powerAssertion(move(other._powerAssertion))
-    , _powerSource(move(other._powerSource))
-    , _waiter(move(other._waiter))
+    : _powerAssertion(std::move(other._powerAssertion))
+    , _powerSource(std::move(other._powerSource))
+    , _waiter(std::move(other._waiter))
 {
 }
 
@@ -68,7 +68,7 @@ bool Awaken::Awaken::setPreventUserIdleSystemSleep(bool preventUserIdleSystemSle
         return false;
     }
     
-    this->_powerAssertion->preventUserIdleSystemSleep = move(preventUserIdleSystemSleep);
+    this->_powerAssertion->preventUserIdleSystemSleep = std::move(preventUserIdleSystemSleep);
     
     return true;
 }
@@ -86,7 +86,7 @@ bool Awaken::Awaken::setPreventUserIdleDisplaySleep(bool preventUserIdleDisplayS
         return false;
     }
     
-    this->_powerAssertion->preventUserIdleDisplaySleep = move(preventUserIdleDisplaySleep);
+    this->_powerAssertion->preventUserIdleDisplaySleep = std::move(preventUserIdleDisplaySleep);
     
     return true;
 }
@@ -107,7 +107,7 @@ bool Awaken::Awaken::setTimeout(chrono::seconds timeout) noexcept
     }
     
     this->_waiter->setTimeout(timeout);
-    this->_powerAssertion->timeout = move(timeout);
+    this->_powerAssertion->timeout = std::move(timeout);
     
     return true;
 }
@@ -119,7 +119,7 @@ chrono::seconds Awaken::Awaken::timeout() const noexcept
 
 void Awaken::Awaken::setTimeoutHandler(function<void()>&& timeoutHandler) noexcept
 {
-    this->_waiter->setTimeoutHandler(move(timeoutHandler));
+    this->_waiter->setTimeoutHandler(std::move(timeoutHandler));
 }
 
 #pragma mark - Minimum Battery Capacity
