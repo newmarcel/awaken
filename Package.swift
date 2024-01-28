@@ -1,6 +1,8 @@
-// swift-tools-version:5.5
+// swift-tools-version:5.8
 
 import PackageDescription
+
+let cxxoptsVersion = "3.1.1"
 
 let package = Package(
     name: "Awaken",
@@ -32,20 +34,15 @@ let package = Package(
             dependencies: ["Awaken"],
             path: ".",
             exclude: [
-                "vendor/meson.build",
-                "vendor/cxxopts/meson.build",
-                "vendor/cxxopts/LICENSE",
-                "vendor/cxxopts/README.md",
-                "vendor/cxxopts/CHANGELOG.md",
                 "build", "src", "include",
-                "Makefile", "meson.build", "Doxyfile",
-                "LICENSE", "CHANGELOG.md", "README.md",
+                "Makefile", "meson.build", "subprojects",
+                "Doxyfile", "LICENSE", "CHANGELOG.md", "README.md",
             ],
             sources: [
                 "main.cpp"
             ],
             cxxSettings: [
-                .headerSearchPath("vendor")
+                .headerSearchPath("subprojects/cxxopts-\(cxxoptsVersion)/include")
             ],
             linkerSettings: [
                 .linkedFramework("CoreFoundation"),
