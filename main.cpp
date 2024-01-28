@@ -11,7 +11,7 @@
 #include <chrono>
 #include <dispatch/dispatch.h>
 #include <Awaken/Awaken.hpp>
-#include "cxxopts/cxxopts.hpp"
+#include <cxxopts.hpp>
 
 void RunAwaken(std::chrono::seconds timeout, bool preventDisplaySleep, bool preventSystemSleep, std::optional<float> minimumBatteryCapacity)
 {

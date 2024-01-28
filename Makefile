@@ -1,4 +1,5 @@
 BUILD_DIR = build
+SUBPROJECTS_DIR = subprojects
 DOCS_DIR = docs
 DESTDIR = ~/install
 BINARY_NAME = awaken
@@ -8,6 +9,7 @@ default: all
 clean:
 	$(RM) -r $(BUILD_DIR)
 	$(RM) -r $(DOCS_DIR)
+	@/usr/bin/find $(SUBPROJECTS_DIR) -mindepth 1 -maxdepth 1 -type d -exec $(RM) -r {} \;
 
 $(DOCS_DIR):
 	doxygen Doxyfile

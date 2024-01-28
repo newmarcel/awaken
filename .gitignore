@@ -3,3 +3,6 @@ build
 xcuserdata
 /.build
 .swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+
+subprojects/*
+!subprojects/*.wrap

@@ -11,7 +11,8 @@ includes = [include_directories('include')]
 
 subdir('include')
 subdir('src')
-subdir('vendor')
+
+cxxopts = dependency('cxxopts')
 
 dependencies = [
   dependency('CoreFoundation'),
@@ -26,6 +27,7 @@ lib = static_library('awaken', project_sources,
   install: true)
 
 exe = executable('awaken', 'main.cpp',
-  include_directories: [include_directories('include'), include_directories('vendor')],
+  include_directories: include_directories('include'),
+  dependencies: [cxxopts],
   link_with: [lib],
   install : true)
