@@ -1,5 +1,5 @@
 //
-//  Configuration.hpp
+//  main.cpp
 //  Awaken
 //
 //  Created by Marcel Dierkes on 24.12.19.
@@ -13,7 +13,7 @@
 #include <Awaken/Awaken.hpp>
 #include "cxxopts/cxxopts.hpp"
 
-void runAwaken(std::chrono::seconds timeout, bool preventDisplaySleep, bool preventSystemSleep, std::optional<float> minimumBatteryCapacity)
+void RunAwaken(std::chrono::seconds timeout, bool preventDisplaySleep, bool preventSystemSleep, std::optional<float> minimumBatteryCapacity)
 {
 //    __block
     auto awaken = Awaken::Awaken("awaken command-line tool");
@@ -45,7 +45,7 @@ void runAwaken(std::chrono::seconds timeout, bool preventDisplaySleep, bool prev
     dispatch_main();
 }
 
-cxxopts::ParseResult parseArguments(int argc, char* argv[])
+cxxopts::ParseResult ParseArguments(int argc, char* argv[])
 {
     try
     {
@@ -88,7 +88,7 @@ cxxopts::ParseResult parseArguments(int argc, char* argv[])
 
 int main(int argc, char **argv)
 {
-    const auto result = parseArguments(argc, argv);
+    const auto result = ParseArguments(argc, argv);
     
     std::chrono::seconds timeout { 0 };
     bool preventDisplaySleep = false;
@@ -128,7 +128,7 @@ int main(int argc, char **argv)
         minimumBatteryCapacity = static_cast<float>(batteryLevel);
     }
     
-    runAwaken(timeout, preventDisplaySleep, preventSystemSleep, minimumBatteryCapacity);
+    RunAwaken(timeout, preventDisplaySleep, preventSystemSleep, minimumBatteryCapacity);
     
     return EXIT_SUCCESS;
 }
