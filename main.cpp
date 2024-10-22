@@ -7,7 +7,7 @@
 //
 
 #include <stdlib.h>
-#include <iostream>
+#include <print>
 #include <chrono>
 #include <dispatch/dispatch.h>
 #include <Awaken/Awaken.hpp>
@@ -27,7 +27,7 @@ void RunAwaken(std::chrono::seconds timeout, bool preventDisplaySleep, bool prev
     {
         awaken.setMinimumBatteryCapacity(*minimumBatteryCapacity);
         awaken.setMinimumBatteryCapacityReachedHandler([](float capacity) {
-            printf("Minimum battery capacity reached %.00f.\n", capacity);
+            std::println("Minimum battery capacity reached {:.0f}", capacity);
         });
     }
     
@@ -67,13 +67,13 @@ cxxopts::ParseResult ParseArguments(int argc, char* argv[])
         
         if(result.count("version"))
         {
-            std::cout << "Awaken " << Awaken::Awaken::version() << std::endl;
+            std::println("Awaken {}", Awaken::Awaken::version());
             exit(EXIT_SUCCESS);
         }
         
         if(result.count("help"))
         {
-            std::cout << options.help() << std::endl;
+            std::println("{}", options.help());
             exit(EXIT_SUCCESS);
         }
         
@@ -81,7 +81,7 @@ cxxopts::ParseResult ParseArguments(int argc, char* argv[])
     }
     catch (const cxxopts::exceptions::exception& e)
     {
-        std::cout << "Failed parsing options: " << e.what() << std::endl;
+        std::println("Failed parsing options: {}", e.what());
         exit(EXIT_FAILURE);
     }
 }
@@ -122,7 +122,7 @@ int main(int argc, char **argv)
         auto batteryLevel = result["battery-level"].as<uint8_t>();
         if(batteryLevel > 100)
         {
-            printf("Unsupported battery percentage '%d' provided.\n", batteryLevel);
+            std::println("Unsupported battery percentage '{}' provided.", batteryLevel);
             exit(EXIT_FAILURE);
         }
         minimumBatteryCapacity = static_cast<float>(batteryLevel);
