@@ -1,8 +1,11 @@
 .DS_Store
-build
 xcuserdata
 /.build
 .swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+
+.cache
+build
+docs
 
 subprojects/*
 !subprojects/*.wrap
